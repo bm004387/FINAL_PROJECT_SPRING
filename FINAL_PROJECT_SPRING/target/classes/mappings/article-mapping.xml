@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="BoardDAO">
+
+	<!-- ResultMap 등록 -->
+	<resultMap id="springResult" type="spring">
+		<result property="bno" column="spring_bno"/>
+		<result property="title" column="spring_title"/>
+		<result property="content" column="spring_content"/>
+		<result property="writer" column="spring_writer"/>
+		<result property="regdate" column="spring_regdate"/>
+		<result property="updatedate" column="spring_updatedate"/>
+	</resultMap>
+	<!-- <![CDATA[]]> : 블록 안의 코드를 문자열로 처리해줌 -->
+	<select id="selectById" resultMap="springResult">
+	<![CDATA[
+		SELECT * FROM SPRING_CRUD WHERE SPRING_BNO = (SELECT MAX(SPRING_BNO) FROM SPRING_CRUD)
+		]]>
+	</select>
+	
+	<select id="detailView" resultMap="springResult">
+	<![CDATA[
+		SELECT * FROM SPRING_CRUD WHERE SPRING_BNO = #{BNO}
+		]]>
+	</select>
+	
+	<select id="selectList" resultMap="springResult">
+	<![CDATA[
+		SELECT * FROM SPRING_CRUD ORDER BY SPRING_BNO DESC
+		]]>
+	</select>
+	
+	<insert id="insert">
+	<![CDATA[
+		insert into spring_crud(spring_bno, spring_title, spring_content, spring_writer, spring_regdate, spring_updatedate)
+		VALUES (spring_crud_seq.nextval, #{title}, #{content}, #{writer}, #{regdate}, #{updatedate})
+		]]>
+	</insert>
+
+	<update id="update">
+	<![CDATA[
+		UPDATE SPRING_CRUD SET SPRING_TITLE = #{title}, SPRING_CONTENT = #{content}, SPRING_WRITER = #{writer}, SPRING_REGDATE = #{regdate}, spring_updatedate = #{updatedate}
+		WHERE SPRING_BNO = #{bno}
+		]]>
+	</update>
+	
+
+	<delete id="delete">
+	<![CDATA[
+		DELETE FROM SPRING_CRUD WHERE SPRING_BNO = (SELECT MAX(SPRING_BNO) FROM SPRING_CRUD)
+		]]>
+	</delete>
+
+</mapper>
